@@ -1,6 +1,8 @@
 from flask import Flask
 from flask import request
 from ShellChain import Block,BlockChain
+import time
+
 app = Flask(__name__)
 @app.route('/test',methods=['GET'])
 def test():
@@ -8,13 +10,38 @@ def test():
     return 'test'
 @app.route('/upload',methods=['POST'])
 def upload_image():
-    pass
+    received_data = request.get_json()
+    print(received_data)
 
 @app.route('/add_to_chain',methods=['POST'])
 def add_to_chain():
-    #上链分为两部分，第一部分是图像的base64编码，
-    # 第二部分是图像的指纹信息（包含全图信息和局部信息）
-    pass
+    received_data = request.get_json()
+    message = ''
+    ''' temp receive data
+    {
+      data: 'img base64',
+      owner: '32 bit id',
+      price: 10.0,
+      description: 'image information',
+      tags: ["tag1", "tag2"],
+    }
+    '''
+    if 'unique':
+        block_data = {
+            'base64':received_data['data'],
+            'fingerprints':[],
+            'timestamp':int(time.time()),
+            'owner':received_data['owner'],
+            'price':received_data['price'],
+            'tags':received_data['tags'],
+        }
+        one_new_block = Block(block_data,previous_block_hash=mini_chain.get_last_block_hash())
+        one_new_block.mine()
+        mini_chain.add_block(one_new_block)
+        message = '区块添加成功：'+one_new_block.hash()
+    else:
+        message = '区块添加失败，图像已存在，图像hash：789797'
+    return message
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
