@@ -1,5 +1,7 @@
 import hashlib
 import json
+from hash_algorithm import getImagePHash,hash_similarity
+
 '''
 区块结构：区块头（前一个区块的hash + nonce）+ 数据
 区块规则：区块哈希值以666开头
