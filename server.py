@@ -1,10 +1,27 @@
 from flask import Flask
 from flask import request
+from flask_cors import *
+from flask import jsonify, make_response
+from functools import wraps
+
 from ShellChain import Block,BlockChain
 from hash_algorithm import getImagePHash,hash_similarity
 import time
 
 app = Flask(__name__)
+# CORS(app, supports_credentials=True)
+CORS(app, resources=r'/*')
+def allow_cross_domain(fun):
+    @wraps(fun)
+    def wrapper_fun(*args, **kwargs):
+        rst = make_response(fun(*args, **kwargs))
+        rst.headers['Access-Control-Allow-Origin'] = '*'
+        rst.headers['Access-Control-Allow-Methods'] = 'PUT,GET,POST,DELETE'
+        allow_headers = "Referer,Accept,Origin,User-Agent"
+        rst.headers['Access-Control-Allow-Headers'] = allow_headers
+        return rst
+    return wrapper_fun
+
 @app.route('/test',methods=['GET'])
 def test():
     print(mini_chain)
@@ -53,6 +70,8 @@ def add_to_chain():
     return message
 
 @app.route('/', methods=['GET', 'POST'])
+# @cross_origin()
+@allow_cross_domain
 def home():
     return '<h1>Home</h1>'
 
