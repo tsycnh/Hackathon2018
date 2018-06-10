@@ -67,11 +67,10 @@ def check_image():
     all_data = mini_chain.get_all_blocks_data()
     suspects = []
     for i,data in enumerate(all_data):
-        for item in data['fingerprints']:
-            likely = hash_all_similarity(received_img_hash,item)
-            print(likely)
-            if likely>=0.5:
-                suspects.append([i,likely])
+        likely = hash_all_similarity(received_img_hash,data['fingerprints'])
+        print(likely)
+        if likely>=0.5:
+            suspects.append([i,likely])
     # if hash_similarity(a_hash,b_hash)>=0.9:
     suspect_data = None
     if len(suspects)>0:
@@ -109,11 +108,10 @@ def add_to_chain():
     all_data = mini_chain.get_all_blocks_data()
     suspects = []
     for i,data in enumerate(all_data):
-        for item in data['fingerprints']:
-            likely = hash_all_similarity(received_img_hash,item)
-            print(likely)
-            if likely>=0.5:
-                suspects.append([i,likely])
+        likely = hash_all_similarity(received_img_hash,data['fingerprints'])
+        print(likely)
+        if likely>=0.5:
+            suspects.append([i,likely])
     # if hash_similarity(a_hash,b_hash)>=0.9:
     if len(suspects)==0:
         block_data = {
